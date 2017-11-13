@@ -1,0 +1,21 @@
+{
+  "name": "hiccup/mailchimp-api",
+  "description": "MailChimp API v3 PHP",
+  "type": "library",
+  "license": "Apache License",
+  "autoload": {
+    "psr-4": {
+      "Hiccup\\MailChimpApi\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Budi Arsana",
+      "email": "budi.arsana@hiccup.com.au"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.1",
+    "guzzlehttp/guzzle": "^6.3"
+  }
+}
