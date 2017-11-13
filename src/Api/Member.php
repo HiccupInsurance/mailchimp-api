@@ -49,10 +49,14 @@ final class Member
      * @param string $listId
      * @param array $parameters see MailChimp doc for list of available parameters
      *
+     * @return array
+     *
      * @see http://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/#create-post_lists_list_id_members
      */
-    public function create(string $listId, array $parameters)
+    public function create(string $listId, array $parameters): array
     {
-        $this->client->post(sprintf('/lists/%s/members', $listId), $parameters);
+        $response = $this->client->post(sprintf('/lists/%s/members', $listId), $parameters);
+
+        return json_decode((string) $response, true);
     }
 }
