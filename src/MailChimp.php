@@ -13,6 +13,12 @@ final class MailChimp
 {
 
     #----------------------------------------------------------------------------------------------
+    # Constants
+    #----------------------------------------------------------------------------------------------
+
+    const VERSION = '3.0';
+
+    #----------------------------------------------------------------------------------------------
     # Properties
     #----------------------------------------------------------------------------------------------
 
@@ -30,7 +36,7 @@ final class MailChimp
         $dataCenter = explode('-', $apiKey)[1];
 
         $client = new Client([
-            'base_uri' => sprintf('https://%s.api.mailchimp.com/3.0', $dataCenter),
+            'base_uri' => sprintf('https://%s.api.mailchimp.com', $dataCenter),
             'auth' => ['any', $apiKey]
         ]);
 
@@ -44,7 +50,7 @@ final class MailChimp
     /**
      * @return Member
      */
-    public function member(): Member
+    public function getMember(): Member
     {
         return $this->member;
     }
