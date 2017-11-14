@@ -17,5 +17,9 @@
   "require": {
     "php": ">=7.0.1",
     "guzzlehttp/guzzle": "^6.3"
+  },
+  "require-dev": {
+    "hassankhan/config": "^0.11.2",
+    "symfony/yaml": "^3.3"
   }
 }
