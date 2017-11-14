@@ -16,3 +16,4 @@ $response = $mailChimp->getMember()->subscribe(
 );
 
 var_dump($response);
+var_dump('sample gpg');
