@@ -2,7 +2,7 @@
   "name": "hiccup/mailchimp-api",
   "description": "MailChimp API v3 PHP",
   "type": "library",
-  "license": "Apache License",
+  "license": "Apache-2.0",
   "autoload": {
     "psr-4": {
       "Hiccup\\MailChimpApi\\": "src/"
