@@ -28,4 +28,3 @@ $response = $memberApi->subscribe(
 );
 
 var_dump($response);
-
