@@ -1,18 +1,31 @@
 <?php
 
-require(__DIR__ . '/../vendor/autoload.php');
+$loader = require(__DIR__ . '/../vendor/autoload.php');
 
-use Hiccup\MailChimpApi\MailChimp;
+
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Hiccup\MailChimpApi\Api\MemberApi;
+use Hiccup\MailChimpApi\MailChimpClient;
+use Hiccup\MailChimpApi\Model\Member;
 use Noodlehaus\Config;
 
-$config = new Config(__DIR__ . '/../config.yml');
-$mailChimp = new MailChimp($config->get('api_key'));
+AnnotationRegistry::registerLoader('class_exists');
 
-$response = $mailChimp->getMember()->subscribe(
+$config = new Config(__DIR__ . '/../config.yml');
+$client = new MailChimpClient($config->get('api_key'));
+$memberApi = new MemberApi($client);
+
+$member = new Member();
+//$member->setEmailAddress('budi.arsana@vroomvroomvroom.com.au');
+//$member->setMergeFields([
+//    'FNAME' => 'Budi',
+//    'LNAME' => 'Arsana'
+//]);
+
+$response = $memberApi->subscribe(
     $config->get('list_id'),
-    [
-        'email_address' => 'budi.arsana@hiccup.co'
-    ]
+    $member
 );
 
 var_dump($response);
+

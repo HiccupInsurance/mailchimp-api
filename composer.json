@@ -16,10 +16,17 @@
   ],
   "require": {
     "php": ">=7.0.1",
-    "guzzlehttp/guzzle": "^6.3"
+    "doctrine/annotations": "^1.6.0",
+    "doctrine/cache": "^1.8.0",
+    "guzzlehttp/guzzle": "^6.3.3",
+    "symfony/messenger": "^4.1.4",
+    "symfony/validator": "^4.1.4"
   },
   "require-dev": {
     "hassankhan/config": "^0.11.2",
-    "symfony/yaml": "^3.3"
+    "symfony/yaml": "^3.4.15"
+  },
+  "config": {
+    "sort-packages": true
   }
 }

@@ -3,13 +3,13 @@
 namespace Hiccup\MailChimpApi;
 
 use GuzzleHttp\Client;
-use Hiccup\MailChimpApi\Api\Member;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * MailChimp v3.0 API integration
  * @see http://developer.mailchimp.com/documentation/mailchimp/reference/overview/
  */
-final class MailChimp
+final class MailChimpClient
 {
 
     #----------------------------------------------------------------------------------------------
@@ -23,9 +23,9 @@ final class MailChimp
     #----------------------------------------------------------------------------------------------
 
     /**
-     * @var Member
+     * @var Client
      */
-    private $member;
+    private $client;
 
     #----------------------------------------------------------------------------------------------
     # Magic methods
@@ -35,12 +35,10 @@ final class MailChimp
     {
         $dataCenter = explode('-', $apiKey)[1];
 
-        $client = new Client([
+        $this->client = new Client([
             'base_uri' => sprintf('https://%s.api.mailchimp.com', $dataCenter),
             'auth' => ['any', $apiKey]
         ]);
-
-        $this->member = new Member($client);
     }
 
     #----------------------------------------------------------------------------------------------
@@ -48,10 +46,12 @@ final class MailChimp
     #----------------------------------------------------------------------------------------------
 
     /**
-     * @return Member
+     * @param string $path
+     * @param array $options
+     * @return ResponseInterface
      */
-    public function getMember(): Member
+    public function put(string $path, array $options): ResponseInterface
     {
-        return $this->member;
+        return $this->client->put($path, $options);
     }
 }
