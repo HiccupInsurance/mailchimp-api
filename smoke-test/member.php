@@ -22,7 +22,7 @@ $member->setMergeFields([
     'LNAME' => 'Arsana'
 ]);
 
-$response = $memberApi->unsubscribe(
+$response = $memberApi->subscribe(
     $config->get('list_id'),
     $member
 );
