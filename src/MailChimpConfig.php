@@ -3,13 +3,16 @@
 namespace Hiccup\MailChimpApi;
 
 use GuzzleHttp\Client;
-use Psr\Http\Message\ResponseInterface;
+use JMS\Serializer\SerializerBuilder;
+use JMS\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * MailChimp v3.0 API integration
  * @see http://developer.mailchimp.com/documentation/mailchimp/reference/overview/
  */
-final class MailChimpClient
+final class MailChimpConfig
 {
 
     #----------------------------------------------------------------------------------------------
@@ -23,14 +26,29 @@ final class MailChimpClient
     #----------------------------------------------------------------------------------------------
 
     /**
+     * HTTP Client
+     *
      * @var Client
      */
     private $client;
+
+    /**
+     * @var ValidatorInterface
+     */
+    private $validator;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
     #----------------------------------------------------------------------------------------------
     # Magic methods
     #----------------------------------------------------------------------------------------------
 
+    /**
+     * @param string $apiKey
+     */
     public function __construct(string $apiKey)
     {
         $dataCenter = explode('-', $apiKey)[1];
@@ -39,6 +57,9 @@ final class MailChimpClient
             'base_uri' => sprintf('https://%s.api.mailchimp.com', $dataCenter),
             'auth' => ['any', $apiKey]
         ]);
+
+        $this->validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
+        $this->serializer = SerializerBuilder::create()->build();
     }
 
     #----------------------------------------------------------------------------------------------
@@ -46,12 +67,26 @@ final class MailChimpClient
     #----------------------------------------------------------------------------------------------
 
     /**
-     * @param string $path
-     * @param array $options
-     * @return ResponseInterface
+     * @return Client
      */
-    public function put(string $path, array $options): ResponseInterface
+    public function getClient(): Client
     {
-        return $this->client->put($path, $options);
+        return $this->client;
+    }
+
+    /**
+     * @return ValidatorInterface
+     */
+    public function getValidator(): ValidatorInterface
+    {
+        return $this->validator;
+    }
+
+    /**
+     * @return SerializerInterface
+     */
+    public function getSerializer(): SerializerInterface
+    {
+        return $this->serializer;
     }
 }

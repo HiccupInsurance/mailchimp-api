@@ -2,11 +2,12 @@
 
 namespace Hiccup\MailChimpApi\Api;
 
-use GuzzleHttp\RequestOptions;
-use Hiccup\MailChimpApi\MailChimpClient;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use Hiccup\MailChimpApi\MailChimpConfig;
 use Hiccup\MailChimpApi\Model\Member;
 use Hiccup\MailChimpApi\Exception\ValidationFailedException;
-use Symfony\Component\Validator\Validation;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -22,7 +23,7 @@ final class MemberApi
     #----------------------------------------------------------------------------------------------
 
     /**
-     * @var MailChimpClient
+     * @var Client
      */
     private $client;
 
@@ -31,17 +32,23 @@ final class MemberApi
      */
     private $validator;
 
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
     #----------------------------------------------------------------------------------------------
     # Magic methods
     #----------------------------------------------------------------------------------------------
 
     /**
-     * @param MailChimpClient $client
+     * @param MailChimpConfig $config
      */
-    public function __construct(MailChimpClient $client)
+    public function __construct(MailChimpConfig $config)
     {
-        $this->client = $client;
-        $this->validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
+        $this->client = $config->getClient();
+        $this->validator = $config->getValidator();
+        $this->serializer = $config->getSerializer();
     }
 
     #----------------------------------------------------------------------------------------------
@@ -55,6 +62,7 @@ final class MemberApi
      * @param Member $member
      * @return Member
      * @throws ValidationFailedException
+     * @throws ClientException
      */
     public function subscribe(string $listId, Member $member): Member
     {
@@ -67,13 +75,55 @@ final class MemberApi
         $response = $this->client->put(
             sprintf(
                 '/%s/lists/%s/members/%s',
-                MailChimpClient::VERSION,
+                MailChimpConfig::VERSION,
                 $listId,
                 md5($member->getEmailAddress())
             ),
-            [RequestOptions::JSON => $parameters]
+            [
+                'body' => $this->serializer->serialize($member, 'json')
+            ]
         );
 
-        return $member;
+        /** @var $successResponse Member */
+        $successResponse = $this->serializer->deserialize((string) $response->getBody(), Member::class, 'json');
+
+        return $successResponse;
+    }
+
+    /**
+     * Unsubscribe a member
+     *
+     * @param string $listId
+     * @param Member $member
+     * @return Member
+     * @throws ValidationFailedException
+     * @throws ClientException
+     */
+    public function unsubscribe(string $listId, Member $member): Member
+    {
+        $errors = $this->validator->validate($member);
+
+        if (count($errors) > 0) {
+            throw new ValidationFailedException(get_class($member), $errors);
+        }
+
+        $member->setStatus(Member::STATUS_UNSUBSCRIBED);
+
+        $response = $this->client->patch(
+            sprintf(
+                '/%s/lists/%s/members/%s',
+                MailChimpConfig::VERSION,
+                $listId,
+                md5($member->getEmailAddress())
+            ),
+            [
+                'body' => $this->serializer->serialize($member, 'json')
+            ]
+        );
+
+        /** @var $successResponse Member */
+        $successResponse = $this->serializer->deserialize((string) $response->getBody(), Member::class, 'json');
+
+        return $successResponse;
     }
 }

@@ -19,6 +19,7 @@
     "doctrine/annotations": "^1.6.0",
     "doctrine/cache": "^1.8.0",
     "guzzlehttp/guzzle": "^6.3.3",
+    "jms/serializer": "^1.13",
     "symfony/messenger": "^4.1.4",
     "symfony/validator": "^4.1.4"
   },

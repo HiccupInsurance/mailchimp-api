@@ -2,8 +2,15 @@
 
 namespace Hiccup\MailChimpApi\Model;
 
+use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
+/**
+ * Class Member
+ * @package Hiccup\MailChimpApi\Model
+ * @Serializer\ExclusionPolicy("all")
+ */
 final class Member
 {
 
@@ -28,6 +35,9 @@ final class Member
      *
      * @Assert\NotBlank()
      * @Assert\Email()
+     *
+     * @Serializer\Expose()
+     * @Serializer\Type("string")
      */
     private $emailAddress;
 
@@ -35,6 +45,9 @@ final class Member
      * Subscriber's current status.
      *
      * @var string
+     *
+     * @Serializer\Expose()
+     * @Serializer\Type("string")
      */
     private $status = Member::STATUS_SUBSCRIBED;
 
@@ -42,6 +55,9 @@ final class Member
      * Type of email this member asked to get ("html" or "text").
      *
      * @var string
+     *
+     * @Serializer\Expose()
+     * @Serializer\Type("string")
      */
     private $emailType = 'html';
 
@@ -49,6 +65,9 @@ final class Member
      * Subscriber’s status. This value is required only if the email address is not already present on the list.
      *
      * @var string
+     *
+     * @Serializer\Expose()
+     * @Serializer\Type("string")
      */
     private $statusIfNew = Member::STATUS_SUBSCRIBED;
 
@@ -56,6 +75,9 @@ final class Member
      * An individual merge var and value for a member.
      *
      * @var string[]
+     *
+     * @Serializer\Expose()
+     * @Serializer\Type("array<string, string>")
      */
     private $mergeFields = [];
 
