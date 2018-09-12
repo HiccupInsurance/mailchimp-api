@@ -15,18 +15,19 @@
     }
   ],
   "require": {
-    "php": ">=7.0.1",
-    "doctrine/annotations": "^1.6.0",
-    "doctrine/cache": "^1.8.0",
+    "php": ">=7.0.0",
+    "doctrine/annotations": "^1.4.0",
+    "doctrine/cache": "^1.6.2",
     "guzzlehttp/guzzle": "^6.3.0",
     "jms/serializer": "^1.13.0",
-    "symfony/validator": "^4.1.0"
+    "symfony/validator": "^3.4.0"
   },
   "require-dev": {
     "hassankhan/config": "^0.11.0",
     "symfony/yaml": "^3.4.0"
   },
   "config": {
+    "bin-dir": "bin/",
     "sort-packages": true
   }
 }
