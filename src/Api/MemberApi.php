@@ -77,7 +77,79 @@ final class MemberApi
                 '/%s/lists/%s/members/%s',
                 MailChimpConfig::VERSION,
                 $listId,
-                md5($member->getEmailAddress())
+                md5(strtolower($member->getEmailAddress()))
+            ),
+            [
+                'body' => $this->serializer->serialize($member, 'json')
+            ]
+        );
+
+        /** @var $successResponse Member */
+        $successResponse = $this->serializer->deserialize((string) $response->getBody(), Member::class, 'json');
+
+        return $successResponse;
+    }
+
+    /**
+     * Subscribe a member
+     *
+     * @param string $listId
+     * @param Member $member
+     * @return Member
+     * @throws ValidationFailedException
+     * @throws ClientException
+     */
+    public function reSubscribe(string $listId, Member $member): Member
+    {
+        $errors = $this->validator->validate($member);
+
+        if (count($errors) > 0) {
+            throw new ValidationFailedException(get_class($member), $errors);
+        }
+
+        $member->setStatus(Member::STATUS_SUBSCRIBED);
+
+        $response = $this->client->patch(
+            sprintf(
+                '/%s/lists/%s/members/%s',
+                MailChimpConfig::VERSION,
+                $listId,
+                md5(strtolower($member->getEmailAddress()))
+            ),
+            [
+                'body' => $this->serializer->serialize($member, 'json')
+            ]
+        );
+
+        /** @var $successResponse Member */
+        $successResponse = $this->serializer->deserialize((string) $response->getBody(), Member::class, 'json');
+
+        return $successResponse;
+    }
+
+    /**
+     * Subscribe a member
+     *
+     * @param string $listId
+     * @param Member $member
+     * @return Member
+     * @throws ValidationFailedException
+     * @throws ClientException
+     */
+    public function getStatus(string $listId, Member $member): Member
+    {
+        $errors = $this->validator->validate($member);
+
+        if (count($errors) > 0) {
+            throw new ValidationFailedException(get_class($member), $errors);
+        }
+
+        $response = $this->client->get(
+            sprintf(
+                '/%s/lists/%s/members/%s',
+                MailChimpConfig::VERSION,
+                $listId,
+                md5(strtolower($member->getEmailAddress()))
             ),
             [
                 'body' => $this->serializer->serialize($member, 'json')
@@ -114,7 +186,7 @@ final class MemberApi
                 '/%s/lists/%s/members/%s',
                 MailChimpConfig::VERSION,
                 $listId,
-                md5($member->getEmailAddress())
+                md5(strtolower($member->getEmailAddress()))
             ),
             [
                 'body' => $this->serializer->serialize($member, 'json')
