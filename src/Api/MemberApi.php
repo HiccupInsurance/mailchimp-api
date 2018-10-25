@@ -91,7 +91,7 @@ final class MemberApi
     }
 
     /**
-     * Get Subscribed member info
+     * Re Subscribe a member
      *
      * @param string $listId
      * @param Member $member
@@ -128,7 +128,7 @@ final class MemberApi
     }
 
     /**
-     * Re Subscribe a member
+     * Get Subscribed member info
      *
      * @param string $listId
      * @param Member $member
