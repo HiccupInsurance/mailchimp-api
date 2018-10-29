@@ -107,7 +107,7 @@ final class MemberApi
             throw new ValidationFailedException(get_class($member), $errors);
         }
 
-        $member->setStatus(Member::STATUS_SUBSCRIBED);
+        $member->setStatus(Member::STATUS_PENDING);
 
         $response = $this->client->patch(
             sprintf(
